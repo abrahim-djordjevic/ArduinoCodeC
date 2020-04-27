@@ -1,0 +1,24 @@
+//include arduino code
+#include<avr/io.h>
+float duration;
+float distance;
+
+int main(void)
+{
+  //begin serial communication
+  Serial.begin(9600);
+  while(true) //loop forever
+  {
+    DDRD|=(1<<PD7); //set PD7 to output
+    PORTD|=(1<<PD7); //set to LOW
+    delayMicroseconds(2);
+    PORTD&=!(1<<PD7); //set to High
+    delayMicroseconds(10);
+    PORTD|=(1<<PD7);
+    DDRD&=!(1<<PD6); //set PD6 to input
+    duration = pulseIn(PD6,HIGH);
+    distance = duration/58;
+    Serial.println(distance);
+    delayMicroseconds(200);
+  }
+}
